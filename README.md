@@ -33,7 +33,23 @@ You may or may not want this.  GKE **does** provide their own backup system but 
 
 Change what you want in here. As mentioned above, change your database root password.
 
-### Bugs
+## Bonus!  The Helm instructions
+
+I've included an example Helm override file.  It's heavily redacted as the thing currently contains secrets.
+
+* Ensure you can connect to your new GKE cluster with "kubectl" and therefore Helm
+* Check out the Mastodon source from [here](https://github.com/mastodon/mastodon).
+* Go to the "chart" folder.  Then run this:
+```
+helm install mastodon . -n mastodon --create-namespace -f values-override.yaml
+```
+
+Subsequent deployments or changes are run via:
+```
+helm upgrade mastodon . -f values-override.yaml
+```
+
+## Bugs
 
 There's a bug in the gke node pool module where it keeps wanting to reset this:
 ```
