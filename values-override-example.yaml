@@ -78,14 +78,12 @@ elasticsearch:
   enabled: true
   # Build this over-engineered thing in the cloud once the CHART supports it being outside Kubernetes
 
-# https://github.com/bitnami/charts/tree/master/bitnami/postgresql#parameters
-# This is a pod currently.  Need to shut the apps down, dump it to a file,
-# reload it into Cloud SQL, set this to false, but give the external details.
+# Using Cloud SQL now.
 postgresql:
   # disable if you want to use an existing db; in which case the values below
   # must match those of that external postgres instance
-  enabled: true
-  # postgresqlHostname: preexisting-postgresql
+  enabled: false
+  postgresqlHostname: 10.16.240.5
   auth:
     database: mastodon_production
     username: postgres
