@@ -21,13 +21,22 @@ This sets up the VPC and everything needed to egress to the internet. You can re
 
 This creates the GKE cluster. A zonal cluster would be cheaper, but I created this for resiliency so it's regional.  It's nodes are entirely private, they autoscale, and it only uses spot nodes that can come and go at will.  Tweak it as you like.
 
-## Cloud SQL - opional - sql.tf
+## Cloud SQL - optional - sql.tf
 
 This sets up a Postgres 14 instance.  Be sure to set its root (postgres) password in settings.tfvars - and don't check that back into Git if you clone this repo. Honestly I'd recommend secret protection.
 
-## Velero Backups - opional - velero.tf
+## Velero Backups - optional - velero.tf
 
 You may or may not want this.  GKE **does** provide their own backup system but Velero is cross-platoform, open source, and generally more flexible.  Once you've run this, you still need to create a certificate in KMS, export it to a file, and use that to install the pod/service/etc.   If you want to disable it just delete the file - or - move it to velero.tf.off.  I hope to convert it to a module at some point to avoid all of that.
+
+Install the Velero Client on your laptop/desktop/macbook etc, ensure you're logged into GCP and your kubectl works, and that you've create your KMS certificate,  then run it like so:
+```
+velero install \
+    --provider gcp \
+    --plugins velero/velero-plugin-for-gcp:v1.5.2 \
+    --bucket cloudcauldron-backups \
+    --secret-file ./credentials-velero
+```
 
 ## Settings - setttings.tfvars
 
@@ -49,7 +58,7 @@ Subsequent deployments or changes are run via:
 helm upgrade mastodon . -f values-override.yaml
 ```
 
-## Bugs
+## Bugs
 
 There's a bug in the gke node pool module where it keeps wanting to reset this:
 ```
