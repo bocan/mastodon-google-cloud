@@ -13,6 +13,49 @@ gcloud auth login
 
 I'm running an autoscaling Mastodon cluster on all of this but the IAC is still a little rough and ready. So you'll want to tweak things a bit.
 
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_google"></a> [google](#provider\_google) | 4.43.1 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_bucket"></a> [bucket](#module\_bucket) | terraform-google-modules/cloud-storage/google//modules/simple_bucket | 3.4.0 |
+| <a name="module_custom_role"></a> [custom\_role](#module\_custom\_role) | terraform-google-modules/iam/google//modules/custom_role_iam | 7.4.1 |
+| <a name="module_gke"></a> [gke](#module\_gke) | terraform-google-modules/kubernetes-engine/google//modules/beta-private-cluster | 23.3.0 |
+| <a name="module_iam_service_accounts"></a> [iam\_service\_accounts](#module\_iam\_service\_accounts) | terraform-google-modules/iam/google//modules/service_accounts_iam | 7.4.1 |
+| <a name="module_iam_storage_buckets"></a> [iam\_storage\_buckets](#module\_iam\_storage\_buckets) | terraform-google-modules/iam/google//modules/storage_buckets_iam | 7.4.1 |
+| <a name="module_kms"></a> [kms](#module\_kms) | terraform-google-modules/kms/google | 2.2.1 |
+| <a name="module_service_account"></a> [service\_account](#module\_service\_account) | terraform-google-modules/service-accounts/google | 4.1.1 |
+| <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-google-modules/network/google | 5.2.0 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [google_compute_address.cloud_nat_ip](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_address) | resource |
+| [google_compute_firewall.fw_iap](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
+| [google_compute_project_metadata.enable_compute_oslogin](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_project_metadata) | resource |
+| [google_compute_router.cloud_router](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router) | resource |
+| [google_compute_router_nat.cloud_nat](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router_nat) | resource |
+| [google_sql_database_instance.mastodon_db](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance) | resource |
+| [google_storage_project_service_account.gcs_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/storage_project_service_account) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_enable_sql"></a> [enable\_sql](#input\_enable\_sql) | Enable Cloud SQL - Postgres  Infrastructure | `bool` | `false` | no |
+| <a name="input_enable_velero_backups"></a> [enable\_velero\_backups](#input\_enable\_velero\_backups) | Enable Velero Backups Infrastructure | `bool` | `false` | no |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID | `string` | n/a | yes |
+| <a name="input_region"></a> [region](#input\_region) | Region | `string` | n/a | yes |
+| <a name="input_sql_disk_size"></a> [sql\_disk\_size](#input\_sql\_disk\_size) | The initial postgres disk size | `string` | `"10"` | no |
+| <a name="input_sql_root_password"></a> [sql\_root\_password](#input\_sql\_root\_password) | The initial postgres password | `string` | n/a | yes |
+| <a name="input_sql_tier"></a> [sql\_tier](#input\_sql\_tier) | The SQL Instance tier | `string` | n/a | yes |
+
 ## Netorking - vpc.tf
 
 This sets up the VPC and everything needed to egress to the internet. You can retain my networking settings below - or tweak it for your own.  The trick is just to make sure nothing overlaps.
