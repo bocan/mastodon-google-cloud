@@ -11,6 +11,10 @@ resource "google_sql_database_instance" "mastodon_db" {
     activation_policy = "ALWAYS"
     availability_type = "REGIONAL"
 
+    maintenance_window {
+      day  = 1
+      hour = 0
+    }
     backup_configuration {
       backup_retention_settings {
         retained_backups = 7
@@ -18,6 +22,7 @@ resource "google_sql_database_instance" "mastodon_db" {
       }
 
       enabled                        = true
+      location                       = "eu"
       start_time                     = "03:00"
       transaction_log_retention_days = 7
     }
