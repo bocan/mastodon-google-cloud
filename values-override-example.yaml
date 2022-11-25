@@ -58,6 +58,33 @@ mastodon:
     server: smtp.eu.mailgun.org
     existingSecret:
 
+  web:
+    port: 3000
+    # -- Number of Web Pods running
+    replicas: 2
+
+  sidekiq:
+    workers:
+    - name: scheduler
+      # -- Number of threads / parallel sidekiq jobs that are executed per Pod
+      concurrency: 25
+      # -- Number of Pod replicas deployed by the Deployment
+      replicas: 1
+      # -- Sidekiq queues for Mastodon that are handled by this worker. See https://docs.joinmastodon.org/admin/scaling/#concurrency
+      # See https://github.com/mperham/sidekiq/wiki/Advanced-Options#queues for how to weight queues as argument
+      queues:
+        - scheduler # Make sure the scheduler queue only exists once and with a worker that has 1 replica.
+    - name: all-queues
+      concurrency: 50
+      resources: {}
+      replicas: 2
+      queues:
+        - push
+        - pull
+        - mailers
+        - default
+        - ingress
+
 ingress:
   enabled: true
   ingressClassName: nginx
