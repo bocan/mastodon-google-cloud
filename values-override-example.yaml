@@ -62,12 +62,34 @@ mastodon:
     port: 3000
     # -- Number of Web Pods running
     replicas: 2
+    resources:
+      limits:
+        cpu: "1"
+        memory: 1280Mi
+      requests:
+        cpu: 250m
+        memory: 768Mi
+
+  streaming:
+    resources:
+      limits:
+        cpu: "500m"
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
 
   sidekiq:
     workers:
     - name: scheduler
       # -- Number of threads / parallel sidekiq jobs that are executed per Pod
       concurrency: 25
+      resources:
+        limits:
+          memory: 768Mi
+        requests:
+          cpu: 250m
+          memory: 512Mi
       # -- Number of Pod replicas deployed by the Deployment
       replicas: 1
       # -- Sidekiq queues for Mastodon that are handled by this worker. See https://docs.joinmastodon.org/admin/scaling/#concurrency
@@ -76,7 +98,12 @@ mastodon:
         - scheduler # Make sure the scheduler queue only exists once and with a worker that has 1 replica.
     - name: all-queues
       concurrency: 50
-      resources: {}
+      resources:
+        limits:
+          memory: 768Mi
+        requests:
+          cpu: 250m
+          memory: 512Mi
       replicas: 2
       queues:
         - push
@@ -132,17 +159,6 @@ redis:
   password: "abcde"
   # you can also specify the name of an existing Secret
   # with a key of redis-password set to the password you want
-
-resources:
-  limits:
-    memory: 2048Mi
-  requests:
-    cpu: 250m
-    memory: 1024Mi
-
-autoscaling:
-  enabled: true
-  minReplicas: 2
 
 affinity:
   podAntiAffinity:
