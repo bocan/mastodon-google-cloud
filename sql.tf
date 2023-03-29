@@ -11,6 +11,11 @@ resource "google_sql_database_instance" "mastodon_db" {
     activation_policy = "ALWAYS"
     availability_type = "REGIONAL"
 
+    database_flags {
+      name  = "max_connections"
+      value = "1000"
+    }
+
     maintenance_window {
       day  = 1
       hour = 0

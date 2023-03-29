@@ -4,7 +4,12 @@ module "gke" {
   project_id                        = var.project_id
   name                              = "gke-mastodon"
   region                            = var.region
-  zones                             = ["${var.region}-a", "${var.region}-b", "${var.region}-c"]
+
+  # regional                        = true
+  # zones                           = ["${var.region}-a", "${var.region}-b", "${var.region}-c"]
+  regional                          = false
+  zones                             = ["${var.region}-a"]
+
   network                           = "mastodon-vpc"
   subnetwork                        = "mastodon-gke-subnet-02"
   ip_range_pods                     = "mastodon-${var.region}-01-gke-01-pods"
@@ -13,7 +18,7 @@ module "gke" {
   network_policy                    = false
   horizontal_pod_autoscaling        = true
   filestore_csi_driver              = false
-  kubernetes_version                = "1.24.6-gke.1500"
+  kubernetes_version                = "1.25.7-gke.1000"
   create_service_account            = true
   enable_private_endpoint           = false
   enable_private_nodes              = true
@@ -23,6 +28,7 @@ module "gke" {
   logging_service                   = "logging.googleapis.com/kubernetes"
   monitoring_service                = "monitoring.googleapis.com/kubernetes"
   disable_legacy_metadata_endpoints = true
+  gce_pd_csi_driver                 = true
 
   # our node pool autoscales so this isn't needed.
   cluster_autoscaling = {
@@ -41,7 +47,10 @@ module "gke" {
     {
       name               = "default-node-pool"
       machine_type       = "e2-medium"
-      node_locations     = "${var.region}-a,${var.region}-b,${var.region}-c"
+
+      # node_locations   = "${var.region}-a,${var.region}-b,${var.region}-c"
+      node_locations   = "${var.region}-a"
+
       min_count          = 1
       max_count          = 3
       location_policy    = "ANY"

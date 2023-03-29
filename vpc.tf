@@ -22,14 +22,14 @@ module "vpc" {
       subnet_name      = "mastodon-subnet-01"
       subnet_ip        = "10.1.32.0/21"
       subnet_region    = var.region
-      subnet_flow_logs = "true"
+      subnet_flow_logs = "false"
       description      = "The subnet used for Mastadon Services"
     },
     {
       subnet_name      = "mastodon-gke-subnet-02"
       subnet_ip        = "10.1.24.0/21"
       subnet_region    = var.region
-      subnet_flow_logs = "true"
+      subnet_flow_logs = "false"
       description      = "The subnet used for Mastadon on GKE"
     }
   ]

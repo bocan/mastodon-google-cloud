@@ -50,7 +50,6 @@ module "custom_role" {
 }
 
 module "iam_service_accounts" {
-  count   = var.enable_velero_backups ? 1 : 0
   source  = "terraform-google-modules/iam/google//modules/service_accounts_iam"
   version = "7.4.1"
 
